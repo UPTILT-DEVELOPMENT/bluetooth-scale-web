@@ -1,0 +1,23 @@
+import styled from '@emotion/styled';
+import { Box, Paper, Typography } from '@mui/material';
+import * as React from 'react';
+import { ScaleDisplayBox } from './scale-display-styles';
+
+type ScaleDisplayProps = {
+    weight?: number,
+};
+
+const ScaleDisplay: React.FC<ScaleDisplayProps> = props => {
+    return (
+        <>
+            <ScaleDisplayBox>
+                <Paper elevation={0}>
+                    <Typography variant='h6' align='center'>WEIGHT</Typography>
+                    <Typography variant='h3' align='center'>{props.weight} kg</Typography>
+                </Paper>
+            </ScaleDisplayBox>
+        </>
+    );
+};
+
+export default ScaleDisplay;
