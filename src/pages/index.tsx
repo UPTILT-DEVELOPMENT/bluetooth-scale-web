@@ -1,13 +1,11 @@
-import BluetoothScale from '@components/bluetooth/BluetoothScale'
 import { ScaleBluetoothIds } from '@enums/ScaleBluetoothIds'
+import Connect from '@modules/connect/Connect'
+import Graph from '@modules/graph/Graph'
 import Scale from '@modules/scale/Scale'
-import { BluetoothOutlined } from '@mui/icons-material'
-import { Button } from '@mui/material'
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useState } from 'react'
-import styles from '../styles/Home.module.css'
 
 
 const scaleDeviceRequestOptions: RequestDeviceOptions = {
@@ -16,27 +14,23 @@ const scaleDeviceRequestOptions: RequestDeviceOptions = {
 }
 
 const Home: NextPage = () => {
+  const [alignment, setAlignment] = useState('scale');
+
+  const handleChange = (event: any, newAlignment: any) => {
+    setAlignment(newAlignment);
+  };
   const [bluetoothDevice, setBluetoothDevice] = useState<BluetoothDevice | null>(null)
-  const [weight, setWeight] = useState(0)
-
-  const handleWeightChange = (e: any) => {
-    const { value: dataView } = e.target
-    /* const value = e.target.value */
-    /* console.log(new Uint16Array(value.buffer)[0])  */
-    const measuredWeight = dataView.getFloat32(0, true)
-    console.log(measuredWeight)
-    setWeight(measuredWeight)
-  }
-
   const findDevice = async () => {
     const foundBluetoothDevice = await navigator.bluetooth.requestDevice(scaleDeviceRequestOptions)
       .catch((error: any) => { console.log(error.message) })
 
     if (foundBluetoothDevice) {
-      console.log(foundBluetoothDevice)
+
       setBluetoothDevice(foundBluetoothDevice)
     }
   }
+
+
 
   return (
     <>
@@ -46,12 +40,34 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* {bluetoothDevice !== null ? <BluetoothScale device={bluetoothDevice} handleWeightChange={handleWeightChange} /> : null}
-      {bluetoothDevice === null ?
-        <Button onClick={async () => await findDevice()} variant="outlined" endIcon={<BluetoothOutlined />}>Connect</Button>
-        : <Scale weight={weight} />} */}
-      <Scale weight={4} />
-
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center'
+      }}>
+        <ToggleButtonGroup
+          color="primary"
+          value={alignment}
+          exclusive
+          onChange={handleChange}
+          aria-label="Platform"
+        >
+          <ToggleButton value="scale">Scale</ToggleButton>
+          <ToggleButton value="data">Data</ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      {/* {
+        bluetoothDevice !== null
+          ? <Scale btDevice={bluetoothDevice} />
+          : <Connect onConnectClick={async () => await findDevice()} />
+      } */}
+      {
+        alignment === "scale" ?
+          (bluetoothDevice !== null
+            ? <Scale btDevice={bluetoothDevice} />
+            : <Connect onConnectClick={async () => await findDevice()} />)
+          : <Graph></Graph>
+      }
+      {/*  <Graph /> */}
     </>
   )
 }

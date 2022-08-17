@@ -8,6 +8,8 @@ type ScaleDeviceProps = {
 };
 
 const ScaleDevice: React.FC<ScaleDeviceProps> = props => {
+    console.log('ScaleDevice render');
+
     return (
         <>
             <ScaleDeviceBox>
@@ -18,4 +20,4 @@ const ScaleDevice: React.FC<ScaleDeviceProps> = props => {
     );
 };
 
-export default ScaleDevice;
+export default React.memo(ScaleDevice);

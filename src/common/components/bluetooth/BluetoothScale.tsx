@@ -1,5 +1,3 @@
-import { Bluetooth, BluetoothOutlined } from '@mui/icons-material';
-import { Chip } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScaleBluetoothIds } from '@enums/ScaleBluetoothIds';
 
@@ -14,30 +12,16 @@ const BluetoothScale: React.FC<BluetoothScaleProps> = props => {
         useState<BluetoothRemoteGATTService | null>(null);
     const [gattServer, setGattServer] =
         useState<BluetoothRemoteGATTServer | null>(null);
+    const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null)
 
-    /* const connect = useCallback (async () => {
-      const gattServer = await props.device.gatt?.connect();
-      const primaryService = await gattServer?.getPrimaryService(
-        ScaleBluetoothIds.PRIMARY_SERVICE_ID
-      );
-  
-  
-    }, []); */
-
-    useEffect(() => {
-        const connect = async () => {
+    const startThing = useCallback(
+        async () => {
             const gattServer = await props.device.gatt?.connect();
-            console.log("\n\n====================GATT SERVER======================\n\n")
-            console.log(gattServer)
-            console.log("\n\n====================GATT SERVER======================\n\n")
 
             const primaryService = await gattServer?.getPrimaryService(
                 ScaleBluetoothIds.PRIMARY_SERVICE_ID
             );
 
-            console.log("\n\n====================PRIMARY SERVICE======================\n\n")
-            console.log(primaryService)
-            console.log("\n\n====================PRIMARY SERVICE======================\n\n")
             const characteristic = await primaryService?.getCharacteristic(
                 ScaleBluetoothIds.CHARACTERISTIC_ID
             );
@@ -49,18 +33,58 @@ const BluetoothScale: React.FC<BluetoothScaleProps> = props => {
             if (primaryService) setPrimaryService(primaryService)
 
             characteristic?.startNotifications();
+            characteristic?.addEventListener('characteristicvaluechanged', listenToThing);
+            setCharacteristic(characteristic || null)
+        },
+        [],
+    )
 
-            characteristic?.addEventListener('characteristicvaluechanged', props.handleWeightChange);
+    const listenToThing = useCallback(
+        (e: any) => {
+            props.handleWeightChange(e)
+        },
+        [props],
+    )
+
+
+    const stopThing = useCallback(
+        async () => {
+
+            (characteristic)
+            if (characteristic) {
+                ('HAHA')
+                characteristic.stopNotifications()
+                characteristic.removeEventListener('characteristicvaluechanged', (e) => props.handleWeightChange(e))
+                gattServer?.disconnect()
+                setCharacteristic(null)
+            } else {
+                ('Already removed')
+            }
+        },
+        [characteristic, gattServer],
+    )
+
+    /* const stopListenThing = useCallback(
+      () => {
+        
+      },
+      [],
+    ) */
+
+
+
+
+    useEffect(() => {
+        ('In useEffect')
+        startThing()
+        return () => {
+            stopThing()
         };
-
-        connect();
-
-        return () => { };
-    }, []);
-
+    }, [startThing, stopThing]);
+    ('BluetoothScale')
     return (
         <>
-            <Chip icon={<BluetoothOutlined />} label={name} variant="outlined" />
+            {/* <Chip icon={<BluetoothOutlined />} label={name} variant="outlined" /> */}
         </>
     );
 };

@@ -6,10 +6,19 @@ import * as React from 'react';
 
 type SelectFormProps = {
     label: string,
-    items: SelectFormItem[]
+    onSelectChange: (e: any) => void,
+    val: number | undefined
 };
 
+const formOptions: SelectFormItem[] = [
+    { text: 'Alternativ 1', value: 1 },
+    { text: 'Alternativ 2', value: 2 },
+    { text: 'Alternativ 3', value: 3 },
+    { text: 'Alternativ 4', value: 4 }
+]
+
 const SelectForm: React.FC<SelectFormProps> = props => {
+    console.log('SelectForm')
     return (
         <>
             <FormControl style={{ minWidth: 245 }} variant='filled' color='primary'>
@@ -17,15 +26,15 @@ const SelectForm: React.FC<SelectFormProps> = props => {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={''}
+                    value={props.val ?? ""}
                     label="Age"
-                    onChange={() => console.log('first')}
+                    onChange={(e: any) => props.onSelectChange(e)}
                 >
-                    {props.items.map((item) => <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>)}
+                    {formOptions.map((item) => <MenuItem key={item.value} defaultValue="" value={item.value}>{item.text}</MenuItem>)}
                 </Select>
             </FormControl>
         </>
     );
 };
 
-export default SelectForm;
+export default React.memo(SelectForm);
