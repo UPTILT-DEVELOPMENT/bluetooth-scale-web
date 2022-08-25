@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { addData } from 'src/config/firebase'
+import { addData, getData } from 'src/config/firebase'
 
 type Data = {
     measurement: number,
@@ -49,7 +49,7 @@ const fakeData4: Data[] = [
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<Data[]>
+    res: NextApiResponse<any>
 ) {
     if (req.method === "POST") {
         const { weight, type } = req.body
@@ -58,26 +58,37 @@ export default async function handler(
         return res.status(200).json([])
     } else if (req.method === "GET") {
         const { wasteType } = req.query
-        let wasteData: Data[] = []
-        switch (wasteType) {
-            case "1":
-                wasteData = fakeData1
-                break;
-            case "2":
-                wasteData = fakeData2
-                break;
-            case "3":
-                wasteData = fakeData3
-                break;
-            case "4":
-                wasteData = fakeData4
-                break;
-            default:
-                break;
+        if (wasteType && typeof wasteType === "string") {
+            const data = await getData(wasteType)
+
+            /* console.log(data) */
+
+            return res.status(200).json(data)
+        } else {
+            return res.status(404).json({ errors: ["Cant find waste type"] })
         }
+        /*  await getData()
+         let wasteData: Data[] = []
+         switch (wasteType) {
+             case "kok":
+                 wasteData = fakeData1
+                 break;
+             case "servering":
+                 wasteData = fakeData2
+                 break;
+             case "tallrik":
+                 wasteData = fakeData3
+                 break;
+             case "beredning":
+                 wasteData = fakeData4
+                 break;
+             default:
+                 wasteData = []
+                 break;
+         } */
 
 
-        return res.status(200).json(wasteData)
+        /* return res.status(200).json(wasteData) */
     }
 
 }

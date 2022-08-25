@@ -18,13 +18,28 @@ const LineChart: React.FC<LineChartProps> = props => {
             x: {
                 grid: {
                     display: false
+                },
+                adapters: {
+                    date: { locale: 'enGB' },
+                    type: 'time',
+                    distribution: "linear",
+                    time: {
+                        parser: "yyyy- MM - dd",
+                        unit: "month"
+                    },
                 }
+                /* type: 'time',
+                time: {
+                    displayFormats: {
+                        quarter: 'MMM YYYY'
+                    }
+                } */
             },
             y: {
                 grid: {
                     display: true
                 }
-            }
+            },
         },
         elements: {
             line: {

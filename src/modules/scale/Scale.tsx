@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useCallback, useState } from 'react';
 import ScaleDevice from './scale-device/ScaleDevice';
@@ -17,12 +17,6 @@ const Scale: React.FC<ScaleProps> = props => {
     const [reason, setReason] = useState<number | undefined>(undefined)
     const [radioValue, setRadioValue] = useState("")
 
-    const handleWeightChange = (e: any) => {
-        const { value: dataView } = e.target
-        const measuredWeight = dataView.getFloat32(0, true)
-        setWeight(measuredWeight)
-    }
-
     const handleRadioValueChanged = useCallback(
         (event: any) => {
             setRadioValue(event.target.value)
@@ -39,6 +33,8 @@ const Scale: React.FC<ScaleProps> = props => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ weight: weight, type: radioValue })
             })
+
+            console.log(response)
         },
         [radioValue, reason],
     )
@@ -48,7 +44,7 @@ const Scale: React.FC<ScaleProps> = props => {
         (e: any) => {
             const { value: dataView } = e.target
             const measuredWeight = dataView.getFloat32(0, true)
-            console.log('WEIGHTXD??!?!??!', measuredWeight)
+            console.log(`Measured Weight: ${measuredWeight}`)
             setWeight(measuredWeight)
         },
         [],
@@ -67,10 +63,37 @@ const Scale: React.FC<ScaleProps> = props => {
                     </ScaleHeaderBox>
                 </Grid>
                 <Grid item xs={12} direction="row" justifyContent='center' container>
-                    <ScaleFormSectionBox>
+                    {/* <ScaleFormSectionBox>
                         <RadioForm onSubmit={onWeightRegisterSubmit} onRadioValueChanged={handleRadioValueChanged} currentValue={radioValue} />
-                    </ScaleFormSectionBox>
+                    </ScaleFormSectionBox> */}
+
+                    <RadioForm onSubmit={onWeightRegisterSubmit} onRadioValueChanged={handleRadioValueChanged} currentValue={radioValue} />
                 </Grid>
+
+                {/* <Grid item xs={12} direction="row" justifyContent='center' container>
+                    <ToggleButtonGroup
+                        color="primary"
+                        value={1}
+                        exclusive
+                        onChange={() => console.log('hej')}
+                        aria-label="Platform"
+                    >
+                        <Grid container spacing={2} xs={12} sx={{ flexGrow: 1 }}>
+                            <Grid item xs={6}>
+                                <ToggleButton fullWidth={true} value="scale">Scale</ToggleButton>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <ToggleButton fullWidth={true} value="data">Data</ToggleButton>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <ToggleButton fullWidth={true} value="data">Shit</ToggleButton>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <ToggleButton fullWidth={true} value="data">Stuff</ToggleButton>
+                            </Grid>
+                        </Grid>
+                    </ToggleButtonGroup>
+                </Grid> */}
             </Grid>
         </>
     );
