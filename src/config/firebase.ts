@@ -12,11 +12,15 @@ const firebaseConfig = {
 };
 
 function initializeAppIfNecessary() {
+    let fireapp;
     try {
-        return getApp();
+        console.log('connecting')
+        fireapp = getApp();
     } catch (any) {
-        return initializeApp(firebaseConfig);
+        console.log('try connecting')
+        fireapp = initializeApp(firebaseConfig);
     }
+    return fireapp
 }
 
 export const app = initializeAppIfNecessary()
@@ -40,7 +44,6 @@ export const getData = async (wasteType?: string) => {
     const querySnap = await getDocs(q);
 
     querySnap.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
         const d = doc.data()
 
         const id = doc.id

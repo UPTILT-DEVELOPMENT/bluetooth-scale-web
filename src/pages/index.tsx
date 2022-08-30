@@ -2,6 +2,7 @@ import { ScaleBluetoothIds } from '@enums/ScaleBluetoothIds'
 import Connect from '@modules/connect/Connect'
 import Graph from '@modules/graph/Graph'
 import Scale from '@modules/scale/Scale'
+import { Email, LinkedIn } from '@mui/icons-material'
 import { Box, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -83,12 +84,20 @@ const Home: NextPage = () => {
             flexGrow: 1,
             justifyContent: "center",
             display: "flex",
+            flexDirection: "row",
             my: 1
           }}
         >
-          <div>
-            <Image priority src="/icon_quare_slack.svg" width={75} height={30} alt="Logo" />
-          </div>
+          <Box sx={{
+            justifyContent: "center",
+            alignItems: "end",
+            display: "flex",
+          }}>
+            {/* <Image priority src="/icon_quare_slack.svg" width={75} height={30} alt="Logo" /> */}
+            <Typography variant="caption">Made By UPTILT AB</Typography>
+            {/* <LinkedIn />
+            <Email /> */}
+          </Box>
         </Box>
       </Paper>
     </>

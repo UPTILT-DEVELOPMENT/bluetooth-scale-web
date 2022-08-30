@@ -15,7 +15,7 @@ const ScaleDisplay: React.FC<ScaleDisplayProps> = props => {
             <ScaleDisplayBox>
                 <Paper elevation={3}>
                     <Typography variant='h6' align='center'>WEIGHT</Typography>
-                    <Typography variant='h3' align='center'>{props.weight} kg</Typography>
+                    <Typography variant='h3' align='center'>{(props.weight!.toFixed(2))} kg</Typography>
                 </Paper>
             </ScaleDisplayBox>
         </>

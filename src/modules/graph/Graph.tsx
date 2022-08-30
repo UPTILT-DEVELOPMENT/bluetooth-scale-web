@@ -97,7 +97,7 @@ const Graph: React.FC<GraphProps> = props => {
                 {/* <Typography sx={{ fontSize: '24px', pb: '2px' }} variant='subtitle1'>Välj kategori</Typography> */}
                 <LineChart
                     data={chartData}
-                    title="Matsvinn över tid=!!"
+                    title="Matsvinn"
                 />
             </Box>
             <Box textAlign='center' sx={{
